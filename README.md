@@ -28,6 +28,16 @@ claude plugin install session-tags --marketplace retropunk/claude
 
 In the Claude desktop app, where `/plugin` doesn't run: click **+** next to the prompt box, then **Plugins**, **Add marketplace** with `retropunk/claude`, then **Add plugin**.
 
+### Updating a mod
+
+An installed mod keeps the copy it downloaded, so new versions don't arrive on their own. To get the latest one, run this in a terminal (or ask Claude to run it for you):
+
+```
+claude plugin update session-tags@retropunk-claude
+```
+
+Then start a new Claude Code session, which loads the new version.
+
 ## Skills
 
 Coming later, in `skills/`.
