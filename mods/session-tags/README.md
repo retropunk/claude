@@ -22,6 +22,14 @@ In the Claude desktop app, where `/plugin` doesn't run: click **+** next to the 
 
 Tags need the Claude desktop app, since that's where the sidebar is. Sessions started after the install pick the mod up.
 
+### Updating
+
+An installed copy doesn't update on its own. To get the latest version, run this in a terminal (or ask Claude to run it for you), then start a new session:
+
+```
+claude plugin update session-tags@retropunk-claude
+```
+
 ## What it does
 
 - After a session's first reply, it adds a tag: a color for the project folder and a picture for the kind of work (🎬 video, 🎨 design, 🔌 plugins, 📝 writing, and more).
