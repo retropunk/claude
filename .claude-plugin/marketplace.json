@@ -1,0 +1,14 @@
+{
+  "name": "retropunk-claude",
+  "description": "Custom Claude Code mods by retropunk",
+  "owner": {
+    "name": "retropunk"
+  },
+  "plugins": [
+    {
+      "name": "session-tags",
+      "source": "./mods/session-tags",
+      "description": "Tags each session's sidebar title with a project color and a work emoji; /tag changes it with words, emoji or a picker"
+    }
+  ]
+}

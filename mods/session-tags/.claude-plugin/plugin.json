@@ -1,0 +1,7 @@
+{
+  "name": "session-tags",
+  "version": "0.4.0",
+  "author": { "name": "retropunk" },
+  "description": "Tags each session's sidebar title with a project color and a work emoji; /tag changes it with words, emoji or a picker",
+  "types": "./types/index.d.ts"
+}
