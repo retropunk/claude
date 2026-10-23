@@ -31,3 +31,7 @@ In the Claude desktop app, where `/plugin` doesn't run: click **+** next to the 
 ## Skills
 
 Coming later, in `skills/`.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
