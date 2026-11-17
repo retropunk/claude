@@ -316,17 +316,37 @@ async function openPicker($: EngineInterface, title: string, theme: string): Pro
     : `The tag picker is open with ideas for ${theme}. Choose a color and a picture, then press Apply.`
 }
 
+// The title is read from the app at the press, not from when the picker opened:
+// the app may have renamed the session since (a new session's first-message name).
+// Any failure shows under the button, and "Done." only once the app reads it back.
+async function renameNow($: EngineInterface, tagFor: (bare: string) => string): Promise<string> {
+  try {
+    const current = await appTitle($)
+    if (current === undefined) return NO_APP
+    const wanted = tagFor(untagged(current))
+    const renamed = await rename($, wanted)
+    if (!renamed.isRenamed) return failed(renamed)
+    const after = await appTitle($)
+    if (after?.trim() !== wanted.trim()) return `The app didn't keep the new name (it reads "${after ?? 'nothing'}"). Press Apply again.`
+    await update($, picker, state => ({ ...state, title: untagged(wanted) }))
+
+    return `Done. This session is now ${wanted}.`
+  } catch (error) {
+    return `The rename didn't go through: ${error instanceof Error ? error.message : String(error)}`
+  }
+}
+
 async function applyPick($: EngineInterface): Promise<void> {
-  const { color, icon, title } = await readPicker($)
+  const { color, icon } = await readPicker($)
   const tag = `${color}${icon}`
   if (tag === '') {
     await update($, picker, state => ({ ...state, note: 'Choose a color or a picture first.' }))
 
     return
   }
+  await update($, picker, state => ({ ...state, note: 'Renaming…' }))
   await setStatus($, 'tagged')
-  const renamed = await rename($, `${tag} ${title}`)
-  const note = renamed.isRenamed ? `Done. This session is now ${tag} ${title}.` : failed(renamed)
+  const note = await renameNow($, bare => `${tag} ${bare}`)
   await update($, picker, state => ({ ...state, note }))
 }
 
@@ -337,10 +357,9 @@ async function suggestPick($: EngineInterface): Promise<void> {
 }
 
 async function removePick($: EngineInterface): Promise<void> {
-  const { title } = await readPicker($)
   await setStatus($, 'off')
-  const renamed = await rename($, title)
-  const note = renamed.isRenamed ? 'Tag removed.' : failed(renamed)
+  const done = await renameNow($, bare => bare)
+  const note = done.startsWith('Done.') ? 'Tag removed.' : done
   await update($, picker, state => ({ ...state, color: '', icon: '', note }))
 }
 
